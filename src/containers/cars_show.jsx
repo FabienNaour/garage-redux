@@ -1,0 +1,61 @@
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+
+import { Link } from 'react-router-dom';
+import { connect, withRouter } from 'react-redux';
+import Aside from '../components/aside';
+
+import { removeCar } from '../actions';
+
+class CarsShow extends Component {
+
+  handleClick = () => {
+    this.props.removeCar(this.props.history, this.props.car);
+  }
+
+  render() {
+
+
+    return [
+
+        <Aside key="aside" garage={this.props.garage}>
+          <Link to="/">Back to list</Link>
+        </Aside>,
+
+      <div className="car-container" >
+        <div className="car-card">
+          <img className="car-picture" src="/assets/images/form.jpg" />
+          <div className="car-details">
+            <span>{this.props.car.brand} - {this.props.car.model}</span>
+          </div>
+          <div className="car-plate">
+            <span>{this.props.car.plate}</span>
+          </div>
+
+          <button className="delete" onClick={this.handleClick}>
+            <i className="fa fa-trash-o" aria-hidden="true"></i>
+            Delete
+          </button>
+
+        </div>
+
+     </div>
+
+     ];
+} }
+
+
+
+
+function mapStateToProps(state, ownProps) {
+  const id = parseInt(ownProps.match.params.id);
+  return {
+    car: state.cars.find((car) => car.id === id),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ removeCar }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CarsShow);
